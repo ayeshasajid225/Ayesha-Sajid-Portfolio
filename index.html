@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex Nova | Creative Portfolio</title>
+  <meta name="description" content="Alex Nova - Creative Designer & Front-End Developer Portfolio" />
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- ===== QUOTE MODAL STYLES (added only) ===== -->
+  <style>
+    .quote-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8, 5, 30, 0.65);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .quote-modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .quote-modal-box {
+      position: relative;
+      width: min(460px, 92vw);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 28px;
+      padding: 2.5rem 2rem 2rem;
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      backdrop-filter: blur(28px) saturate(180%);
+      box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.45),
+        0 1px 0 rgba(255, 255, 255, 0.15) inset,
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      transform: translateY(30px) scale(0.94);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .quote-modal-overlay.active .quote-modal-box {
+      transform: translateY(0) scale(1);
+    }
+    .quote-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      line-height: 1;
+    }
+    .quote-modal-close:hover {
+      background: rgba(231, 76, 60, 0.25);
+      color: #ff8a8a;
+      border-color: rgba(231, 76, 60, 0.4);
+    }
+    .quote-modal-service-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(102, 126, 234, 0.18);
+      border: 1px solid rgba(102, 126, 234, 0.35);
+      border-radius: 50px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #a8b8ff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      margin-bottom: 1.4rem;
+      letter-spacing: 0.3px;
+    }
+    .quote-modal-quotemark {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 64px;
+      line-height: 0.6;
+      color: rgba(102, 126, 234, 0.22);
+      margin-bottom: 0.6rem;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .quote-modal-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .quote-modal-author {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: rgba(180, 160, 255, 0.65);
+      font-style: italic;
+    }
+    .quote-modal-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      margin: 1.3rem 0;
+    }
+    .quote-modal-cta {
+      display: block;
+      width: 100%;
+      padding: 11px;
+      background: linear-gradient(135deg, rgba(102,126,234,0.45), rgba(118,75,162,0.45));
+      border: 1px solid rgba(102, 126, 234, 0.4);
+      border-radius: 50px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .quote-modal-cta:hover {
+      opacity: 0.85;
+      transform: scale(1.02);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== LOADING SCREEN ===== -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">AS</div>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+      <p class="loader-text">Loading Experience...</p>
+    </div>
+  </div>
+
+  <!-- ===== FLOATING BACKGROUND SHAPES ===== -->
+  <div class="bg-shapes" aria-hidden="true">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+    <div class="shape shape-5"></div>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="#home">
+        <span class="brand-box">AS</span>
+        <span class="brand-text">AYESHA SAJID</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="toggler-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto gap-1">
+          <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#graphic-design">Design</a></li>
+          <li class="nav-item"><a class="nav-link" href="#frontend-dev">Dev</a></li>
+          <!-- <li class="nav-item"><a class="nav-link" href="#testimonials">Reviews</a></li> -->
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO / HOME ===== -->
+  <section id="home" class="hero-section">
+    <div class="container h-100">
+      <div class="row h-100 align-items-center">
+        <div class="col-lg-7 hero-content reveal">
+          <div class="hero-badge mb-3">
+            <span class="badge-dot"></span>
+            Available for Work
+          </div>
+          <h1 class="hero-title">
+            Hi, I'm <span class="gradient-text">Ayesha Sajid</span>
+          </h1>
+          <h2 class="hero-subtitle">
+            I'm a <span class="typed-text" id="typedText"></span><span class="cursor-blink">|</span>
+          </h2>
+          <p class="hero-desc">
+            Crafting immersive digital experiences through bold design and clean code. 
+            From stunning visuals to pixel-perfect interfaces — I bring ideas to life.
+          </p>
+          <div class="hero-btns d-flex flex-wrap gap-3 mt-4">
+            <a href="#projects" class="btn btn-glow">
+              <i class="bi bi-grid-fill me-2"></i>View Projects
+            </a>
+            <a href="#contact" class="btn btn-glass">
+              <i class="bi bi-send-fill me-2"></i>Hire Me
+            </a>
+          </div>
+          <!-- <div class="hero-stats d-flex flex-wrap gap-4 mt-5">
+            <div class="stat-item">
+              <div class="stat-num" data-target="50">0</div>
+              <div class="stat-label">Projects Done</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-num" data-target="30">0</div>
+              <div class="stat-label">Happy Clients</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-num" data-target="3">0</div>
+              <div class="stat-label">Years Exp.</div>
+            </div>
+          </div> -->
+        </div>
+        <div class="col-lg-5 d-flex justify-content-center mt-5 mt-lg-0 reveal reveal-right">
+          <div class="hero-avatar-wrap">
+            <div class="avatar-ring ring-1"></div>
+            <div class="avatar-ring ring-2"></div>
+            <div class="avatar-glow"></div>
+            <div class="hero-avatar">
+              <i class="bi bi-person-fill avatar-icon"></i>
+            </div>
+            <!-- Floating badges -->
+            <div class="float-badge badge-design">
+              <i class="bi bi-palette-fill"></i> Designer
+            </div>
+            <div class="float-badge badge-dev">
+              <i class="bi bi-code-slash"></i> Developer
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <div class="scroll-dot"></div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="section-pad">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="section-tag">Who I Am</span>
+        <h2 class="section-title">About <span class="gradient-text">Me</span></h2>
+        <div class="title-line"></div>
+      </div>
+      <div class="row align-items-center g-5 mt-2">
+        <div class="col-lg-5 reveal">
+          <div class="about-img-wrap">
+            <div class="about-img-card glass-card">
+              <i class="bi bi-person-badge-fill about-icon"></i>
+              <div class="about-img-glow"></div>
+            </div>
+            <div class="about-exp-badge glass-card">
+              <span class="exp-num">0+</span>
+              <span class="exp-label">Fresher</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7 reveal reveal-right">
+          <h3 class="about-name">Ayesha Sajid</h3>
+          <p class="about-role gradient-text mb-3">Creative Designer & Front-End Developer</p>
+          <p class="about-bio">
+            I'm a passionate creative professional who blends the art of design with the precision of code. 
+            With a keen eye for aesthetics and a deep love for technology, I craft digital experiences 
+            that are not only visually stunning but also functionally seamless.
+          </p>
+          <p class="about-bio mt-3">
+            Whether it's a bold brand identity, a pixel-perfect website, or an engaging UI — 
+            I approach every project with creativity, dedication, and a relentless pursuit of excellence.
+          </p>
+          <div class="about-info-grid mt-4">
+            <div class="info-item">
+              <i class="bi bi-geo-alt-fill"></i>
+              <span>Karachi • Pakistan</span>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-envelope-fill"></i>
+              <span>hafizaa343ayesha@gmail.com</span>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-telephone-fill"></i>
+              <span>+92 3XX XXX XXXX</span>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-mortarboard-fill"></i>
+              <span>Matriculation (Completed)</span>
+            </div>
+          </div>
+          <div class="mt-4">
+            <a href="assets/documnets/Hafiza-Ayesha-Sajid-FlowCV-Resume-20260129 (1) (1).pdf" class="btn btn-glow me-3">
+              <i class="bi bi-download me-2"></i>Download CV
+            </a>
+            <a href="#skills" class="btn btn-glass">
+              <i class="bi bi-lightning-fill me-2"></i>My Skills
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS ===== -->
+  <section id="skills" class="section-pad section-alt">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="section-tag">What I Know</span>
+        <h2 class="section-title">My <span class="gradient-text">Skills</span></h2>
+        <div class="title-line"></div>
+        <p class="section-desc">Tools and technologies I use to build amazing digital products.</p>
+      </div>
+      <div class="row g-4 mt-3">
+        <!-- Design Skills -->
+        <div class="col-lg-6 reveal">
+          <div class="glass-card skill-card h-100">
+            <h4 class="skill-cat"><i class="bi bi-palette2 me-2 gradient-text"></i>Design</h4>
+            <div class="skill-list">
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>Adobe Photoshop</span><span class="skill-pct">90%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+              </div>
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>Adobe Illustrator</span><span class="skill-pct">85%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+              </div>
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>Figma / UI Design</span><span class="skill-pct">88%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
+              </div>
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>Adobe XD</span><span class="skill-pct">80%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
+              </div>
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>Canva Pro</span><span class="skill-pct">95%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Dev Skills -->
+        <div class="col-lg-6 reveal reveal-right">
+          <div class="glass-card skill-card h-100">
+            <h4 class="skill-cat"><i class="bi bi-code-square me-2 gradient-text"></i>Development</h4>
+            <div class="skill-list">
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>HTML5 / CSS3</span><span class="skill-pct">95%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
+              </div>
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>JavaScript (ES6+)</span><span class="skill-pct">85%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+              </div>
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>Bootstrap 5</span><span class="skill-pct">92%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
+              </div>
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>Responsive Design</span><span class="skill-pct">90%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+              </div>
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span>Git / Version Control</span><span class="skill-pct">78%</span>
+                </div>
+                <div class="skill-bar"><div class="skill-fill" data-width="78"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech badges -->
+      <div class="tech-badges-wrap reveal mt-5">
+        <div class="tech-badge"><i class="bi bi-filetype-html"></i> HTML5</div>
+        <div class="tech-badge"><i class="bi bi-filetype-css"></i> CSS3</div>
+        <div class="tech-badge"><i class="bi bi-filetype-js"></i> JavaScript</div>
+        <div class="tech-badge"><i class="bi bi-bootstrap-fill"></i> Bootstrap</div>
+        <div class="tech-badge"><i class="bi bi-brush-fill"></i> Figma</div>
+        <div class="tech-badge"><i class="bi bi-image-fill"></i> Photoshop</div>
+        <div class="tech-badge"><i class="bi bi-vector-pen"></i> Illustrator</div>
+        <div class="tech-badge"><i class="bi bi-git"></i> Git</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services" class="section-pad">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="section-tag">What I Offer</span>
+        <h2 class="section-title">My <span class="gradient-text">Services</span></h2>
+        <div class="title-line"></div>
+        <p class="section-desc">Comprehensive solutions tailored to elevate your brand and digital presence.</p>
+      </div>
+      <div class="row g-4 mt-3">
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="glass-card service-card h-100">
+            <div class="service-icon-wrap">
+              <i class="bi bi-palette-fill service-icon"></i>
+              <div class="service-icon-glow"></div>
+            </div>
+            <h4 class="service-title">Graphic Design</h4>
+            <p class="service-desc">Logos, posters, social media graphics, brand identity — I create visuals that make lasting impressions and communicate your message powerfully.</p>
+            <ul class="service-list">
+              <li><i class="bi bi-check-circle-fill"></i> Logo & Brand Identity</li>
+              <li><i class="bi bi-check-circle-fill"></i> Poster & Print Design</li>
+              <li><i class="bi bi-check-circle-fill"></i> Social Media Graphics</li>
+            </ul>
+            <!-- CHANGED: href="#contact" → onclick="openQuoteModal('social-branding')" -->
+            <a href="#contact" class="btn btn-glass btn-sm mt-auto" onclick="openQuoteModal(event,'graphic-design')">Get Quote <i class="bi bi-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="glass-card service-card h-100 featured-service">
+            <div class="featured-badge">Most Popular</div>
+            <div class="service-icon-wrap">
+              <i class="bi bi-code-slash service-icon"></i>
+              <div class="service-icon-glow"></div>
+            </div>
+            <h4 class="service-title">Front-End Development</h4>
+            <p class="service-desc">Modern, fast, and fully responsive websites built with clean HTML, CSS, and JavaScript. Pixel-perfect designs that work flawlessly on every device.</p>
+            <ul class="service-list">
+              <li><i class="bi bi-check-circle-fill"></i> Responsive Websites</li>
+              <li><i class="bi bi-check-circle-fill"></i> Landing Pages</li>
+              <li><i class="bi bi-check-circle-fill"></i> UI/UX Implementation</li>
+            </ul>
+            <!-- CHANGED: href="#contact" → onclick="openQuoteModal('social-branding')" -->
+            <a href="#contact" class="btn btn-glass btn-sm mt-auto" onclick="openQuoteModal(event,'frontend')">Get Quote <i class="bi bi-arrow-right"></i></a>
+          </div>
+        </div>
+            <div class="col-md-6 col-lg-4 reveal reveal-right">
+      <div class="glass-card service-card h-100">
+        <div class="service-icon-wrap">
+          <i class="bi bi-megaphone-fill service-icon"></i>
+          <div class="service-icon-glow"></div>
+        </div>
+        <h4 class="service-title">Social Media Marketing</h4>
+        <p class="service-desc">
+          Strategic social media marketing to grow your brand presence. Content creation, audience engagement, and campaigns that boost reach and conversions.
+        </p>
+        <ul class="service-list">
+          <li><i class="bi bi-check-circle-fill"></i> Content Creation</li>
+          <li><i class="bi bi-check-circle-fill"></i> Social Media Management</li>
+          <li><i class="bi bi-check-circle-fill"></i> Ads & Campaigns</li>
+        </ul>
+        <!-- CHANGED: href="#contact" → onclick="openQuoteModal('social-branding')" -->
+            <a href="#contact" class="btn btn-glass btn-sm mt-auto" onclick="openQuoteModal(event,'social-media')">Get Quote <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="glass-card service-card h-100">
+            <div class="service-icon-wrap">
+              <i class="bi bi-megaphone-fill service-icon"></i>
+              <div class="service-icon-glow"></div>
+            </div>
+            <h4 class="service-title">Social Media Branding</h4>
+            <p class="service-desc">Consistent brand presence across all platforms with cohesive visual identity, engaging content templates, and standout profile designs.</p>
+            <ul class="service-list">
+              <li><i class="bi bi-check-circle-fill"></i> Profile & Cover Design</li>
+              <li><i class="bi bi-check-circle-fill"></i> Content Templates</li>
+              <li><i class="bi bi-check-circle-fill"></i> Brand Consistency</li>
+            </ul>
+            <!-- CHANGED: href="#contact" → onclick="openQuoteModal('social-branding')" -->
+            <a href="#contact" class="btn btn-glass btn-sm mt-auto" onclick="openQuoteModal(event,'social-branding')">Get Quote <i class="bi bi-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="glass-card service-card h-100">
+            <div class="service-icon-wrap">
+              <i class="bi bi-stars service-icon"></i>
+              <div class="service-icon-glow"></div>
+            </div>
+            <h4 class="service-title">Motion & Animation</h4>
+            <p class="service-desc">Smooth CSS and JS animations, micro-interactions, and scroll effects that bring your website to life with a premium, polished feel.</p>
+            <ul class="service-list">
+              <li><i class="bi bi-check-circle-fill"></i> CSS Animations</li>
+              <li><i class="bi bi-check-circle-fill"></i> Scroll Effects</li>
+              <li><i class="bi bi-check-circle-fill"></i> Interactive Elements</li>
+            </ul>
+            <!-- CHANGED: href="#contact" → onclick="openQuoteModal('motion')" -->
+            <a href="#contact" class="btn btn-glass btn-sm mt-auto" onclick="openQuoteModal(event,'motion')">Get Quote <i class="bi bi-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal reveal-right">
+      <div class="glass-card service-card h-100">
+        <div class="service-icon-wrap">
+          <i class="bi bi-palette-fill service-icon"></i>
+          <div class="service-icon-glow"></div>
+        </div>
+        <h4 class="service-title">Figma Design</h4>
+        <p class="service-desc">
+          Creative UI designs crafted in Figma with modern layouts, interactive prototypes, and user-friendly experiences that bring ideas to life.
+        </p>
+        <ul class="service-list">
+          <li><i class="bi bi-check-circle-fill"></i> UI Design</li>
+          <li><i class="bi bi-check-circle-fill"></i> Prototyping</li>
+          <li><i class="bi bi-check-circle-fill"></i> Responsive Layouts</li>
+        </ul>
+        <!-- CHANGED: href="#contact" → onclick="openQuoteModal('figma')" -->
+        <a href="#contact" class="btn btn-glass btn-sm mt-auto" onclick="openQuoteModal(event,'figma')">
+          Get Quote <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section id="projects" class="section-pad section-alt">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="section-tag">My Work</span>
+        <h2 class="section-title">Featured <span class="gradient-text">Projects</span></h2>
+        <div class="title-line"></div>
+        <p class="section-desc">A selection of projects that showcase my design and development expertise.</p>
+      </div>
+      <!-- Filter Tabs -->
+      <div class="project-filters text-center mt-4 reveal">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="design">Design</button>
+        <button class="filter-btn" data-filter="dev">Development</button>
+        <button class="filter-btn" data-filter="ui">UI/UX</button>
+      </div>
+      <div class="row g-4 mt-2" id="projectGrid">
+        <!-- Project Card 1 -->
+        <div class="col-md-6 col-lg-4 project-item reveal" data-category="dev">
+          <div class="glass-card project-card h-100">
+            <div class="project-thumb" style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);">
+              <i class="bi bi-globe2 project-thumb-icon"></i>
+              <div class="project-overlay">
+                <a href="https://github.com/ayeshasajid225/Wrist-wrap" class="btn btn-glass btn-sm me-2"><i class="bi bi-eye"></i> Preview</a>
+                <!-- <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-github"></i> Code</a> -->
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-tags">
+                <span class="p-tag">HTML</span><span class="p-tag">CSS</span><span class="p-tag">JS</span>
+              </div>
+              <h5 class="project-name">Wrist wrap</h5>
+              <p class="project-info">A fully responsive e-commerce landing page with glassmorphism design, smooth animations, and modern UI elements.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Project Card 2 -->
+        <div class="col-md-6 col-lg-4 project-item reveal" data-category="design">
+          <div class="glass-card project-card h-100">
+            <div class="project-thumb" style="background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);">
+              <i class="bi bi-brush-fill project-thumb-icon"></i>
+              <div class="project-overlay">
+                <a href="https://github.com/ayeshasajid225/Rent-a-car" class="btn btn-glass btn-sm me-2"><i class="bi bi-eye"></i> Preview</a>
+                <!-- <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-behance"></i> View</a> -->
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-tags">
+                <span class="p-tag">Html</span><span class="p-tag">Css</span>
+              </div>
+              <h5 class="project-name">Rent a car</h5>
+              <p class="project-info">Complete brand identity for a tech startup including logo, color palette, typography guide, and marketing materials.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Project Card 3 -->
+        <div class="col-md-6 col-lg-4 project-item reveal reveal-right" data-category="ui">
+          <div class="glass-card project-card h-100">
+            <div class="project-thumb" style="background: linear-gradient(135deg, #0d1117, #161b22, #21262d);">
+              <i class="bi bi-layout-text-sidebar project-thumb-icon"></i>
+              <div class="project-overlay">
+                <a href="https://github.com/ayeshasajid225/Auction-Table" class="btn btn-glass btn-sm me-2"><i class="bi bi-eye"></i> Preview</a>
+                <!-- <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-figma"></i> Code</a> -->
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-tags">
+                <span class="p-tag">Html</span><span class="p-tag">Css</span>
+              </div>
+              <h5 class="project-name">Auction Table</h5>
+              <p class="project-info">Dark-themed financial analytics dashboard with data visualizations, complex tables, and intuitive navigation system.</p>
+            </div>
+          </div>
+        </div>
+        <!-- =============== Project Card 4 ==================
+        <div class="col-md-6 col-lg-4 project-item reveal" data-category="dev">
+          <div class="glass-card project-card h-100">
+            <div class="project-thumb" style="background: linear-gradient(135deg, #0a0a0a, #1a0533, #2d0a4e);">
+              <i class="bi bi-music-note-list project-thumb-icon"></i>
+              <div class="project-overlay">
+                <a href="#" class="btn btn-glass btn-sm me-2"><i class="bi bi-eye"></i> Preview</a>
+                <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-github"></i> Code</a>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-tags">
+                <span class="p-tag">HTML</span><span class="p-tag">Bootstrap</span><span class="p-tag">JS</span>
+              </div>
+              <h5 class="project-name">Music Streaming App</h5>
+              <p class="project-info">A Spotify-inspired music streaming interface with playlist management, player controls, and animated visualizer.</p>
+            </div>
+          </div>
+        </div>
+                    ============== Project Card 5 =================
+        <div class="col-md-6 col-lg-4 project-item reveal" data-category="design">
+          <div class="glass-card project-card h-100">
+            <div class="project-thumb" style="background: linear-gradient(135deg, #003322, #00472c, #006633);">
+              <i class="bi bi-journal-richtext project-thumb-icon"></i>
+              <div class="project-overlay">
+                <a href="#" class="btn btn-glass btn-sm me-2"><i class="bi bi-eye"></i> Preview</a>
+                <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-behance"></i> View</a>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-tags">
+                <span class="p-tag">Photoshop</span><span class="p-tag">Print</span>
+              </div>
+              <h5 class="project-name">Magazine Layout Design</h5>
+              <p class="project-info">Editorial magazine layout with sophisticated typography, photo editing, and cohesive visual storytelling.</p>
+            </div>
+          </div>
+        </div>
+                =============== Project Card 6 =====================
+        <div class="col-md-6 col-lg-4 project-item reveal reveal-right" data-category="ui">
+          <div class="glass-card project-card h-100">
+            <div class="project-thumb" style="background: linear-gradient(135deg, #200122, #6f0000, #a00030);">
+              <i class="bi bi-cart4 project-thumb-icon"></i>
+              <div class="project-overlay">
+                <a href="#" class="btn btn-glass btn-sm me-2"><i class="bi bi-eye"></i> Preview</a>
+                <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-figma"></i> Figma</a>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-tags">
+                <span class="p-tag">Figma</span><span class="p-tag">Prototype</span>
+              </div>
+              <h5 class="project-name">Food Delivery App</h5>
+              <p class="project-info">Full UX flow for a food delivery mobile app with onboarding, ordering, tracking, and checkout screens.</p>
+            </div>
+          </div>
+        </div> -->
+      </div>
+      <div class="text-center mt-5 reveal">
+        <a href="#contact" class="btn btn-glow">
+          <i class="bi bi-send me-2"></i>Want a Project Like This?
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GRAPHIC DESIGN PAGE ===== -->
+  <section id="graphic-design" class="section-pad">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="section-tag">Visual Art</span>
+        <h2 class="section-title">Graphic <span class="gradient-text">Design</span></h2>
+        <div class="title-line"></div>
+        <p class="section-desc">A showcase of creative design work — from logos to posters to digital art.</p>
+      </div>
+      <!-- Category Tabs -->
+      <div class="design-filters text-center mt-4 reveal">
+        <button class="filter-btn active" data-gfilter="all">All</button>
+        <button class="filter-btn" data-gfilter="logo">Logos</button>
+        <button class="filter-btn" data-gfilter="poster">Posters</button>
+        <button class="filter-btn" data-gfilter="social">Social Media</button>
+        <button class="filter-btn" data-gfilter="banner">Banners</button>
+      </div>
+      <!-- Gallery Grid -->
+      <div class="design-gallery mt-4" id="designGallery">
+        <div class="design-item reveal" data-gcat="logo">
+          <div class="design-card glass-card">
+            <!-- <div class="design-preview" style="background:linear-gradient(135deg, #141E30, #243B55);"> -->
+              <div class="design-preview" style="background:url('assets/Posts/rent\ a\ car\ logo.png') center/cover no-repeat;">
+              <!-- <i class="bi bi-hexagon-fill design-prev-icon"></i>
+              <span class="design-prev-text">NEXUS</span> -->
+            </div>
+            <div class="design-info">
+              <h6>Nexus Tech Logo</h6>
+              <span class="design-cat-tag">Logo Design</span>
+            </div>
+          </div>
+        </div>
+        <div class="design-item reveal" data-gcat="poster">
+          <div class="design-card glass-card">
+            <!-- <div class="design-preview" style="background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);"> -->
+              <div class="design-preview" style="background:url('assets/Posts/Database\ post\ \(1\).jpg') center/cover no-repeat;">
+              <!-- <i class="bi bi-music-note-beamed design-prev-icon"></i>
+              <span class="design-prev-text">CONCERT</span> -->
+            </div>
+            <div class="design-info">
+              <h6>Data Base</h6>
+              <span class="design-cat-tag">Poster</span>
+            </div>
+          </div>
+        </div>
+        <div class="design-item reveal" data-gcat="social">
+          <div class="design-card glass-card">
+         <!-- <div class="design-preview" style="background: linear-gradient(135deg, #f093fb, #f5576c, #4facfe);"> -->
+           <div class="design-preview" style="background:url('assets/Posts/App\ Maintenance\ and\ Optimization\ Post\ .jpg') center/cover no-repeat;">
+              <!-- <i class="bi bi-instagram design-prev-icon" style="color:#fff;"></i> -->
+              <!-- <span class="design-prev-text">Brand</span> -->
+            </div>
+            <div class="design-info">
+              <h6>MAintenence Optimization</h6>
+              <span class="design-cat-tag">Social Media</span>
+            </div>
+          </div>
+        </div>
+        <div class="design-item reveal" data-gcat="banner">
+          <div class="design-card glass-card">
+            <!-- <div class="design-preview" style="background: linear-gradient(135deg, #11998e, #38ef7d);"> -->
+              <div class="design-preview" style="background:url('assets/Posts/CAR\ RENTAL.png') center/cover no-repeat;">
+              <!-- <i class="bi bi-shop design-prev-icon" style="color:#fff;"></i>
+              <span class="design-prev-text">SALE</span> -->
+            </div>
+            <div class="design-info">
+              <h6>Frineds Rent a Car</h6>
+              <span class="design-cat-tag">Social Media Post</span>
+            </div>
+          </div>
+        </div>
+        <div class="design-item reveal" data-gcat="logo">
+          <div class="design-card glass-card">
+            <!-- <div class="design-preview" style="background: linear-gradient(135deg, #2c3e50, #4ca1af);"> -->
+          <div class="design-preview" style="background:url('assets/Posts/GRAPHIC\ DESIGN\ POST.jpg') center/cover no-repeat;">
+              <!-- <i class="bi bi-triangle-fill design-prev-icon"></i>
+              <span class="design-prev-text">APEX</span> -->
+            </div>
+            <div class="design-info">
+              <h6>Graphic Design</h6>
+              <span class="design-cat-tag">Graphic Design</span>
+            </div>
+          </div>
+        </div>
+        <div class="design-item reveal" data-gcat="poster">
+          <div class="design-card glass-card">
+            <!-- <div class="design-preview" style="background: linear-gradient(135deg, #1a1a1a, #3d3d3d);"> -->
+              <div class="design-preview" style="background:url('assets/Posts/Urgent\ Situation\ Post.jpg') center/cover no-repeat;">
+              <!-- <i class="bi bi-camera-fill design-prev-icon"></i>
+              <span class="design-prev-text">PHOTO</span> -->
+            </div>
+            <div class="design-info">
+              <h6>Urgent Situation</h6>
+              <span class="design-cat-tag">Poster</span>
+            </div>
+          </div>
+        </div>
+        <div class="design-item reveal" data-gcat="social">
+          <div class="design-card glass-card">
+            <!-- <div class="design-preview" style="background: linear-gradient(135deg, #fc4a1a, #f7b733);"> -->
+               <div class="design-preview" style="background:url('assets/Posts/Yellow\ and\ Black\ Modern\ Car\ Rent\ Instagram\ Post.png') center/cover no-repeat;">
+              <!-- <i class="bi bi-trophy-fill design-prev-icon" style="color:#fff;"></i>
+              <span class="design-prev-text">AWARD</span> -->
+            </div>
+            <div class="design-info">
+              <h6>Modern Car </h6>
+              <span class="design-cat-tag">Social Media</span>
+            </div>
+          </div>
+        </div>
+        <div class="design-item reveal" data-gcat="banner">
+          <div class="design-card glass-card">
+            <!-- <div class="design-preview" style="background: linear-gradient(135deg, #004e92, #000428);"> -->
+               <div class="design-preview" style="background:url('assets/Posts/CAR\ RENTAL.png') center/cover no-repeat;">
+              <!-- <i class="bi bi-airplane-fill design-prev-icon"></i>
+              <span class="design-prev-text">TRAVEL</span> -->
+            </div>
+            <div class="design-info">
+              <h6>Car Rental</h6>
+              <span class="design-cat-tag">Post</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FRONT-END DEVELOPMENT ===== -->
+  <section id="frontend-dev" class="section-pad section-alt">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="section-tag">Clean Code</span>
+        <h2 class="section-title">Front-End <span class="gradient-text">Development</span></h2>
+        <div class="title-line"></div>
+        <p class="section-desc">Web projects built with precision using the core stack of the modern web.</p>
+      </div>
+
+      <!-- Tech Category Cards -->
+      <div class="row g-4 mt-3">
+        <div class="col-md-6 col-lg-3 reveal">
+          <div class="glass-card tech-cat-card text-center h-100">
+            <div class="tech-cat-icon html-icon">
+              <i class="bi bi-filetype-html"></i>
+            </div>
+            <h5 class="tech-cat-title">HTML5</h5>
+            <p class="tech-cat-desc">Semantic markup, accessibility, SEO-optimized structure and modern HTML APIs.</p>
+            <div class="tech-cat-count"><span class="count-num" data-target="6">0</span> Projects</div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 reveal">
+          <div class="glass-card tech-cat-card text-center h-100">
+            <div class="tech-cat-icon css-icon">
+              <i class="bi bi-filetype-css"></i>
+            </div>
+            <h5 class="tech-cat-title">CSS3</h5>
+            <p class="tech-cat-desc">Animations, Flexbox, Grid, custom properties, glassmorphism, and responsive design.</p>
+            <div class="tech-cat-count"><span class="count-num" data-target="5">0</span> Projects</div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 reveal">
+          <div class="glass-card tech-cat-card text-center h-100">
+            <div class="tech-cat-icon js-icon">
+              <i class="bi bi-filetype-js"></i>
+            </div>
+            <h5 class="tech-cat-title">JavaScript</h5>
+            <p class="tech-cat-desc">ES6+, DOM manipulation, event handling, AJAX, animations, and interactive UIs.</p>
+            <div class="tech-cat-count"><span class="count-num" data-target="3">0</span> Projects</div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 reveal reveal-right">
+          <div class="glass-card tech-cat-card text-center h-100">
+            <div class="tech-cat-icon bs-icon">
+              <i class="bi bi-bootstrap-fill"></i>
+            </div>
+            <h5 class="tech-cat-title">Bootstrap</h5>
+            <p class="tech-cat-desc">Rapid prototyping, grid system, components, utilities, and custom theming.</p>
+            <div class="tech-cat-count"><span class="count-num" data-target="5">0</span> Projects</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dev Projects -->
+      <!-- <div class="row g-4 mt-4">
+        <div class="col-md-6 reveal">
+          <div class="glass-card dev-project-card">
+            <div class="dev-project-header">
+              <div class="dev-dots">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              </div>
+              <span class="dev-filename">portfolio.html</span>
+            </div>
+            <div class="dev-project-body">
+              <h5>Personal Portfolio Website</h5>
+              <p>A glassmorphism-themed portfolio with smooth scroll animations, typing effect, and interactive project showcase.</p>
+              <div class="dev-tags">
+                <span class="p-tag">HTML</span><span class="p-tag">CSS</span><span class="p-tag">JS</span><span class="p-tag">Bootstrap</span>
+              </div>
+            </div>
+            <div class="dev-project-footer">
+              <a href="#" class="btn btn-glass btn-sm"><i class="bi bi-eye me-1"></i>Live Preview</a>
+              <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-github me-1"></i>GitHub</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 reveal reveal-right">
+          <div class="glass-card dev-project-card">
+            <div class="dev-project-header">
+              <div class="dev-dots">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              </div>
+              <span class="dev-filename">dashboard.html</span>
+            </div>
+            <div class="dev-project-body">
+              <h5>Admin Dashboard</h5>
+              <p>Fully responsive admin panel with dark theme, animated sidebar, data tables, and chart components built from scratch.</p>
+              <div class="dev-tags">
+                <span class="p-tag">HTML</span><span class="p-tag">CSS</span><span class="p-tag">Bootstrap</span>
+              </div>
+            </div>
+            <div class="dev-project-footer">
+              <a href="#" class="btn btn-glass btn-sm"><i class="bi bi-eye me-1"></i>Live Preview</a>
+              <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-github me-1"></i>GitHub</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 reveal">
+          <div class="glass-card dev-project-card">
+            <div class="dev-project-header">
+              <div class="dev-dots">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              </div>
+              <span class="dev-filename">landing.html</span>
+            </div>
+            <div class="dev-project-body">
+              <h5>SaaS Landing Page</h5>
+              <p>Modern SaaS product landing page with hero section, feature highlights, pricing cards, testimonials, and FAQ accordion.</p>
+              <div class="dev-tags">
+                <span class="p-tag">HTML</span><span class="p-tag">CSS</span><span class="p-tag">JS</span>
+              </div>
+            </div>
+            <div class="dev-project-footer">
+              <a href="#" class="btn btn-glass btn-sm"><i class="bi bi-eye me-1"></i>Live Preview</a>
+              <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-github me-1"></i>GitHub</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 reveal reveal-right">
+          <div class="glass-card dev-project-card">
+            <div class="dev-project-header">
+              <div class="dev-dots">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              </div>
+              <span class="dev-filename">app.js</span>
+            </div>
+            <div class="dev-project-body">
+              <h5>JavaScript Quiz App</h5>
+              <p>Dynamic quiz application with timed questions, score tracking, progress bar, animations, and results summary screen.</p>
+              <div class="dev-tags">
+                <span class="p-tag">JavaScript</span><span class="p-tag">HTML</span><span class="p-tag">CSS</span>
+              </div>
+            </div>
+            <div class="dev-project-footer">
+              <a href="#" class="btn btn-glass btn-sm"><i class="bi bi-eye me-1"></i>Live Preview</a>
+              <a href="#" class="btn btn-glow btn-sm"><i class="bi bi-github me-1"></i>GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <!-- <section id="testimonials" class="section-pad">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="section-tag">Client Love</span>
+        <h2 class="section-title">What People <span class="gradient-text">Say</span></h2>
+        <div class="title-line"></div>
+        <p class="section-desc">Don't take my word for it — here's what clients say about working with me.</p>
+      </div>
+      <div class="row g-4 mt-3">
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="glass-card testimonial-card h-100">
+            <div class="testi-stars mb-3">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="testi-text">"Alex delivered an absolutely stunning website for our startup. The attention to detail, the animations, and the overall design quality exceeded every expectation we had."</p>
+            <div class="testi-author">
+              <div class="testi-avatar" style="background: linear-gradient(135deg, #667eea, #764ba2);">S</div>
+              <div>
+                <div class="testi-name">Sarah Mitchell</div>
+                <div class="testi-role">CEO, TechFlow Inc.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="glass-card testimonial-card h-100 featured-testi">
+            <div class="testi-stars mb-3">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="testi-text">"The brand identity Alex created for us is phenomenal. Our logo, color palette, and visual style perfectly capture what we wanted to communicate. Highly recommended!"</p>
+            <div class="testi-author">
+              <div class="testi-avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c);">M</div>
+              <div>
+                <div class="testi-name">Marcus Chen</div>
+                <div class="testi-role">Founder, Nexus Labs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal reveal-right">
+          <div class="glass-card testimonial-card h-100">
+            <div class="testi-stars mb-3">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+            </div>
+            <p class="testi-text">"Fast, professional, and incredibly talented. Alex built our landing page in record time and the results speak for themselves — our conversion rate doubled!"</p>
+            <div class="testi-author">
+              <div class="testi-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">J</div>
+              <div>
+                <div class="testi-name">Jordan Lee</div>
+                <div class="testi-role">Marketing Director, Vortex</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="glass-card testimonial-card h-100">
+            <div class="testi-stars mb-3">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="testi-text">"Working with Alex was a breeze. Clear communication, creative ideas, and delivered exactly what was promised — on time and on budget. Will definitely work together again."</p>
+            <div class="testi-author">
+              <div class="testi-avatar" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">A</div>
+              <div>
+                <div class="testi-name">Aisha Rahman</div>
+                <div class="testi-role">Product Designer, Lumio</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="glass-card testimonial-card h-100">
+            <div class="testi-stars mb-3">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="testi-text">"The social media design pack Alex made for us completely transformed our Instagram presence. Engagement went up 300%. Absolute game changer for our brand."</p>
+            <div class="testi-author">
+              <div class="testi-avatar" style="background: linear-gradient(135deg, #fa709a, #fee140);">R</div>
+              <div>
+                <div class="testi-name">Riley Foster</div>
+                <div class="testi-role">Brand Manager, Glowup</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal reveal-right">
+          <div class="glass-card testimonial-card h-100">
+            <div class="testi-stars mb-3">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="testi-text">"Outstanding quality and creativity. Alex has a rare ability to understand the vision and translate it into breathtaking visuals. Our website is now our best salesperson!"</p>
+            <div class="testi-author">
+              <div class="testi-avatar" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">D</div>
+              <div>
+                <div class="testi-name">David Park</div>
+                <div class="testi-role">CTO, Pixel Forge</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="section-pad section-alt">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="section-tag">Let's Talk</span>
+        <h2 class="section-title">Get In <span class="gradient-text">Touch</span></h2>
+        <div class="title-line"></div>
+        <p class="section-desc">Have a project in mind or just want to say hello? My inbox is always open.</p>
+      </div>
+      <div class="row g-5 mt-2">
+        <!-- Contact Info -->
+        <div class="col-lg-5 reveal">
+          <div class="contact-info">
+            <h4 class="contact-info-title">Let's Create Something Amazing Together</h4>
+            <p class="contact-info-text">Whether you need a stunning website, a beautiful logo, or a complete brand identity — I'm here to turn your vision into reality. Reach out and let's get started!</p>
+            <div class="contact-items mt-4">
+              <div class="contact-item">
+                <div class="contact-icon-wrap"><i class="bi bi-envelope-fill"></i></div>
+                <div>
+                  <div class="contact-item-label">Email</div>
+                  <div class="contact-item-val">hafizaa343ayesha@gmail.com</div>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon-wrap"><i class="bi bi-telephone-fill"></i></div>
+                <div>
+                  <div class="contact-item-label">Phone</div>
+                  <div class="contact-item-val">+923191235980</div>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon-wrap"><i class="bi bi-geo-alt-fill"></i></div>
+                <div>
+                  <div class="contact-item-label">Location</div>
+                  <div class="contact-item-val">Pakistan, Karachi</div>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon-wrap"><i class="bi bi-clock-fill"></i></div>
+                <div>
+                  <div class="contact-item-label">Response Time</div>
+                  <div class="contact-item-val">Within 24 Hours</div>
+                </div>
+              </div>
+            </div>
+            <!-- Social -->
+            <div class="contact-social mt-4">
+              <a href="#" class="social-link" aria-label="GitHub"><i class="bi bi-github"></i></a>
+              <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+              <a href="#" class="social-link" aria-label="Dribbble"><i class="bi bi-dribbble"></i></a>
+              <a href="#" class="social-link" aria-label="Behance"><i class="bi bi-behance"></i></a>
+              <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+            </div>
+          </div>
+        </div>
+        <!-- Contact Form -->
+        <div class="col-lg-7 reveal reveal-right">
+          <div class="glass-card contact-form-card">
+            <form id="contactForm" novalidate>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label-custom">Your Name</label>
+                    <input type="text" class="form-control form-control-glass" placeholder="John Doe" required />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label-custom">Email Address</label>
+                    <input type="email" class="form-control form-control-glass" placeholder="john@example.com" required />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label class="form-label-custom">Subject</label>
+                    <input type="text" class="form-control form-control-glass" placeholder="Project Inquiry" />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label class="form-label-custom">Service Needed</label>
+                    <select class="form-control form-control-glass">
+                      <option value="">Select a service...</option>
+                      <option>Graphic Design</option>
+                      <option>Front-End Development</option>
+                      <option>UI/UX Design</option>
+                      <option>Social Media Branding</option>
+                      <option>Full Project</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label class="form-label-custom">Your Message</label>
+                    <textarea class="form-control form-control-glass" rows="5" placeholder="Tell me about your project..."></textarea>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-glow w-100">
+                    <i class="bi bi-send-fill me-2"></i>Send Message
+                  </button>
+                </div>
+              </div>
+            </form>
+            <!-- Success message (hidden) -->
+            <div id="formSuccess" class="form-success" style="display:none;">
+              <i class="bi bi-check-circle-fill"></i>
+              <h5>Message Sent!</h5>
+              <p>Thank you for reaching out. I'll get back to you within 24 hours.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="footer">
+    <div class="footer-glow"></div>
+    <div class="container">
+      <div class="row g-4 footer-top">
+        <div class="col-lg-4">
+          <div class="footer-brand">
+            <span class="brand-box">AS</span>
+            <span class="brand-text">Ayesha Sajid</span>
+          </div>
+          <p class="footer-bio mt-3">Creative designer & front-end developer crafting exceptional digital experiences with passion and precision.</p>
+          <div class="footer-social mt-3">
+            <a href="#" class="social-link" aria-label="GitHub"><i class="bi bi-github"></i></a>
+            <a href="https://www.linkedin.com/in/hafiza-ayesha-sajid-24342a377?utm_source=share_via&utm_content=profile&utm_medium=member_android" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            <!-- <a href="#" class="social-link" aria-label="Dribbble"><i class="bi bi-dribbble"></i></a>
+            <a href="#" class="social-link" aria-label="Behance"><i class="bi bi-behance"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a> -->
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+          <h6 class="footer-heading">Navigate</h6>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#projects">Projects</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 col-lg-2">
+          <h6 class="footer-heading">Specialties</h6>
+          <ul class="footer-links">
+            <li><a href="#graphic-design">Graphic Design</a></li>
+            <li><a href="#frontend-dev">Front-End Dev</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <h6 class="footer-heading">Newsletter</h6>
+          <p class="footer-bio">Get updates on new projects and articles straight to your inbox.</p>
+          <div class="newsletter-form mt-3">
+            <input type="email" class="form-control form-control-glass" placeholder="your@email.com" />
+            <button class="btn btn-glow mt-2 w-100"><i class="bi bi-envelope me-2"></i>Subscribe</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 <span class="gradient-text">Ayesha Sajid</span>. All rights reserved. Crafted with <i class="bi bi-heart-fill" style="color:#e74c3c;"></i> and lots of ☕</p>
+        <p class="footer-tagline">Designed & Built by Ayesha Sajid</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== BACK TO TOP ===== -->
+  <button id="backToTop" aria-label="Back to top">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <!-- ===== QUOTE MODAL HTML (added only) ===== -->
+  <div class="quote-modal-overlay" id="quoteModalOverlay">
+    <div class="quote-modal-box" id="quoteModalBox">
+      <button class="quote-modal-close" id="quoteModalClose" aria-label="Close modal">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <span class="quote-modal-service-badge" id="quoteModalBadge">
+        <i class="bi bi-stars"></i> Service
+      </span>
+      <span class="quote-modal-quotemark">"</span>
+      <p class="quote-modal-text" id="quoteModalText"></p>
+      <p class="quote-modal-author" id="quoteModalAuthor"></p>
+      <div class="quote-modal-divider"></div>
+      <a href="#contact" class="quote-modal-cta" id="quoteModalCta">
+        <i class="bi bi-send-fill me-2"></i>Let's Work Together
+      </a>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="script.js"></script>
+
+  <!-- ===== QUOTE MODAL SCRIPT (added only) ===== -->
+  <script>
+    var quoteData = {
+      'social-branding': {
+        icon: 'bi-megaphone-fill',
+        badge: 'Social Media Branding',
+        quote: 'Your brand is what people say about you when you\'re not in the room. Make every pixel count.',
+        author: '— Brand Strategy Philosophy'
+      },
+      'motion': {
+        icon: 'bi-stars',
+        badge: 'Motion & Animation',
+        quote: 'Animation is not the art of drawings that move, but the art of movements that are drawn.',
+        author: '— Norman McLaren, Pioneer Animator'
+      },
+      'figma': {
+        icon: 'bi-palette-fill',
+        badge: 'Figma Design',
+        quote: 'Design is not just what it looks like and feels like. Design is how it works.',
+        author: '— Steve Jobs'
+      },
+          'frontend': {
+        icon: 'bi-code-slash',
+        badge: 'Front-End Development',
+        quote: 'Great design is invisible, but great code is unforgettable.',
+        author: '— UI Engineering Principle'
+      },
+
+      'graphic-design': {
+        icon: 'bi-palette-fill',
+        badge: 'Graphic Design',
+        quote: 'Design is the silent ambassador of your brand.',
+        author: '— Paul Rand'
+      },
+
+      'social-media': {
+        icon: 'bi-megaphone-fill',
+        badge: 'Social Media Marketing',
+        quote: 'Don’t build followers, build relationships.',
+        author: '— Marketing Wisdom'
+        }
+      }
+
+    function openQuoteModal(e, service) {
+      e.preventDefault();
+      var d = quoteData[service];
+      if (!d) return;
+      document.getElementById('quoteModalBadge').innerHTML = '<i class="bi ' + d.icon + '"></i> ' + d.badge;
+      document.getElementById('quoteModalText').textContent = d.quote;
+      document.getElementById('quoteModalAuthor').textContent = d.author;
+      document.getElementById('quoteModalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeQuoteModal() {
+      document.getElementById('quoteModalOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('quoteModalClose').addEventListener('click', closeQuoteModal);
+
+    document.getElementById('quoteModalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeQuoteModal();
+    });
+
+    document.getElementById('quoteModalCta').addEventListener('click', closeQuoteModal);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeQuoteModal();
+    });
+  </script>
+
+</body>
+</html>
